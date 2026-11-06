@@ -1,0 +1,291 @@
+/* ==========================================================
+   JELLYFIN CINEMATIC THEME
+   Black UI, floating pill nav, big hero, outlined Top 10,
+   rounded posters, cinematic detail page.
+   Paste in: Dashboard > General > Custom CSS code
+   Tested target: Jellyfin web 10.10 / 10.11 (selectors may
+   need small tweaks on other versions)
+   ========================================================== */
+
+/* @import lines MUST stay at the very top */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap');
+
+/* ---------- 1. VARIABLES ---------- */
+:root {
+  --accent: #00d4ff;            /* cyan accent bar / highlights */
+  --bg: #000;
+  --pill-bg: rgba(28, 28, 30, 0.55);
+  --radius-card: 14px;
+  --radius-btn: 999px;
+  --font-title: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+/* ---------- 2. GLOBAL BLACK LOOK ---------- */
+html, body, .skinBody, .mainAnimatedPages, .page, .libraryPage,
+.homePage, .itemDetailPage, .backgroundContainer {
+  background: var(--bg) !important;
+  font-family: var(--font-body) !important;
+}
+.backgroundContainer.withBackdrop { background: rgba(0,0,0,.82) !important; }
+
+/* thin dark scrollbars */
+* { scrollbar-width: thin; scrollbar-color: #333 transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 8px; }
+
+/* ---------- 3. TOP BAR: TRANSPARENT + FLOATING PILL NAV ---------- */
+.skinHeader, .skinHeader.semiTransparent, .skinHeader-withBackground {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.skinHeader { position: absolute !important; }   /* scrolls away with page */
+
+/* the centered pill that holds the tabs */
+.headerTabs, .headerTabs .MuiTabs-root, .headerTabs .emby-tabs-slider {
+  background: var(--pill-bg) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-radius: var(--radius-btn) !important;
+  padding: 2px 12px !important;
+  width: fit-content !important;
+  margin: 8px auto !important;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.headerTabs .MuiTab-root, .headerTabs .emby-tab-button {
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  color: #e8e8e8 !important;
+  min-height: 38px !important;
+}
+.headerTabs .Mui-selected, .headerTabs .emby-tab-button-active {
+  color: #fff !important;
+}
+.headerTabs .MuiTabs-indicator { background: var(--accent) !important; height: 2px; }
+
+/* round logo button + header icons */
+.headerLogo, .headerBackButton, .headerButton {
+  color: #fff !important;
+}
+.headerUserButton img, .headerUserButton .MuiAvatar-root {
+  border-radius: 8px !important;
+}
+
+/* ---------- 4. SECTION TITLES (condensed font + accent bar) ---------- */
+.verticalSection { margin-bottom: 2.2rem !important; }
+.sectionTitle, .sectionTitle-cards, h2.sectionTitle {
+  font-family: var(--font-title) !important;
+  font-size: 2.1rem !important;
+  font-weight: 400 !important;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  line-height: 1;
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+  margin: 0 0 .9rem 0 !important;
+}
+.sectionTitleContainer { align-items: center; }
+.sectionTitleContainer .sectionTitle-cards::after { content: none; }
+
+/* ---------- 5. POSTER CARDS ---------- */
+.card .cardBox, .card .cardBox-bottompadded {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.cardScalable, .cardImageContainer, .cardPadder + .cardImageContainer,
+.card .cardContent, .card .cardOverlayContainer {
+  border-radius: var(--radius-card) !important;
+  overflow: hidden;
+}
+.card .cardImageContainer {
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.55);
+}
+.card:hover .cardImageContainer {
+  transform: scale(1.06);
+  box-shadow: 0 14px 34px rgba(0,0,0,.8);
+  z-index: 5;
+}
+/* hide text under posters (poster-only look like your photos) */
+.card .cardText, .card .cardFooter, .card .cardText-secondary { display: none !important; }
+.card .cardBox-bottompadded { margin-bottom: 0 !important; }
+
+/* progress bar on Continue Watching */
+.itemProgressBar { height: 4px !important; background: rgba(255,255,255,.2) !important; border-radius: 4px; }
+.itemProgressBarForeground { background: var(--accent) !important; border-radius: 4px; }
+
+/* corner chips (unplayed count, played tick) */
+.countIndicator, .playedIndicator {
+  background: rgba(20,20,20,.75) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- 6. TOP 10 ROW (add class "top10-row" or target your section) ----------
+   KefinTweaks / Home Screen Sections: set the section's CSS class to top10-row.
+   If you can't set a class, replace .top10-row with the selector Inspect shows. */
+.top10-row .itemsContainer { counter-reset: rank; }
+.top10-row .card {
+  counter-increment: rank;
+  position: relative;
+  margin-left: 105px !important;
+}
+.top10-row .card::before {
+  content: counter(rank);
+  position: absolute;
+  left: -112px;
+  bottom: 0;
+  font: 400 13rem/0.8 var(--font-title);
+  color: transparent;
+  -webkit-text-stroke: 3px rgba(255,255,255,.28);
+  pointer-events: none;
+  z-index: 0;
+}
+.top10-row .card .cardBox { position: relative; z-index: 1; }
+
+/* ---------- 7. HERO BANNER (Media Bar / Editors Choice / Home hero) ---------- */
+.mediaBar, #slides-container, .editorsChoice, .homeHero {
+  border-radius: 0 !important;
+  min-height: 78vh;
+  background-size: cover !important;
+  background-position: right center !important;
+}
+.mediaBar::after, #slides-container::after, .editorsChoice::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.25) 45%, transparent 70%),
+    linear-gradient(0deg, #000 0%, transparent 35%);
+  pointer-events: none;
+}
+.mediaBar .title, .mediaBar img.logo, .editorsChoice .logo {
+  max-width: 340px !important;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.6));
+}
+.mediaBar .description, .editorsChoice .overview {
+  max-width: 560px;
+  font-size: .95rem;
+  line-height: 1.5;
+  color: #e6e6e6;
+}
+
+/* ---------- 8. BUTTONS (Play / More info / Download ...) ---------- */
+.detailButton, .btnPlay, .mainDetailButtons .button-flat,
+.mediaBar .play-btn, .mediaBar .info-btn {
+  border-radius: var(--radius-btn) !important;
+  padding: .55rem 1.3rem !important;
+  font-weight: 600 !important;
+  font-size: .9rem !important;
+  text-transform: none !important;
+  background: rgba(255,255,255,.08) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  backdrop-filter: blur(10px);
+  transition: background .2s, transform .2s;
+}
+.detailButton:hover, .mediaBar .info-btn:hover { background: rgba(255,255,255,.18) !important; transform: translateY(-1px); }
+
+/* primary = white pill with black text */
+.btnPlay, .btnResume, .detailButton.btnPlay, .mediaBar .play-btn {
+  background: #fff !important;
+  color: #000 !important;
+  border-color: #fff !important;
+}
+.btnPlay .material-icons, .btnResume .material-icons { color: #000 !important; }
+
+/* round icon buttons on the right (watched / info / more) */
+.detailButton.emby-button.detailButton-mini,
+.mainDetailButtons .btnPlaystate, .mainDetailButtons .btnMoreCommands {
+  border-radius: 50% !important;
+  width: 46px; height: 46px; padding: 0 !important;
+}
+
+/* ---------- 9. ITEM DETAIL PAGE (like your Resident Evil screen) ---------- */
+.itemBackdrop, .backdropContainer { background-position: right top !important; }
+.itemBackdrop::after, .detailPageWrapperContainer::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, #000 0%, rgba(0,0,0,.7) 35%, transparent 65%),
+    linear-gradient(0deg, #000 0%, transparent 40%);
+  pointer-events: none;
+}
+.detailPagePrimaryContainer, .detailRibbon { background: transparent !important; }
+.detailImageContainer { display: none !important; }          /* hide poster, show logo only */
+.detailLogo { max-width: 360px !important; width: 100%; filter: drop-shadow(0 4px 14px rgba(0,0,0,.7)); }
+.itemName.parentName { font-family: var(--font-title); font-size: 3.4rem; letter-spacing: .5px; }
+.itemMiscInfo, .itemMiscInfo-primary { font-size: .85rem; color: #d0d0d0; }
+.starRatingContainer .material-icons { color: var(--accent) !important; }
+.mediaInfoOfficialRating {
+  border: 1px solid rgba(255,255,255,.5) !important;
+  border-radius: 4px; padding: 0 6px; font-size: .7rem;
+}
+.overview, .itemOverview {
+  max-width: 600px; font-size: .95rem; line-height: 1.55; color: #e8e8e8;
+}
+.itemGenres a, .itemGenres span { color: #d0d0d0 !important; }
+
+/* ---------- 10. CAST & CREW (rounded portrait tiles, no names) ---------- */
+#castCollapsible .personCard .cardImageContainer,
+.personCard .cardContent { border-radius: 12px !important; }
+.personCard .cardImageContainer { aspect-ratio: 3 / 4; }
+
+/* ---------- 11. STUDIO / NETWORK LOGO ROW ----------
+   Use a home section named e.g. "Studios" and give it class "studio-row".
+   Logos should be transparent PNG/SVG. They get forced white + dimmed. */
+.studio-row .card .cardImageContainer {
+  background-color: transparent !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  filter: brightness(0) invert(1);
+  opacity: .8;
+  transition: opacity .2s, transform .2s;
+}
+.studio-row .card:hover .cardImageContainer { opacity: 1; transform: scale(1.1); }
+.studio-row .cardText { display: none !important; }
+.studio-row .itemsContainer { align-items: center; gap: 1.6rem; }
+
+/* ---------- 12. DOLBY / 4K / HDR BADGES (Jellyfin Enhanced quality tags) ---------- */
+.quality-badge, .je-quality-tag, .media-badge {
+  background: rgba(20,20,20,.7) !important;
+  color: #fff !important;
+  font-size: .62rem !important;
+  font-weight: 700 !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  backdrop-filter: blur(6px);
+}
+
+/* "New season" red tag */
+.new-season-badge, .je-new-badge {
+  background: #e50914 !important;
+  color: #fff !important;
+  font-size: .65rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px 4px 0 0;
+}
+
+/* ---------- 13. SMALL POLISH ---------- */
+.emby-select, .emby-input, .emby-textarea {
+  background: rgba(255,255,255,.07) !important;
+  border-radius: 10px !important;
+}
+.dialog, .actionSheet, .MuiPaper-root {
+  background: rgba(18,18,20,.92) !important;
+  backdrop-filter: blur(24px);
+  border-radius: 16px !important;
+}
+
+/* Mobile: tone things down */
+@media (max-width: 800px) {
+  .sectionTitle, .sectionTitle-cards { font-size: 1.6rem !important; }
+  .top10-row .card { margin-left: 70px !important; }
+  .top10-row .card::before { font-size: 8rem; left: -76px; }
+  .detailLogo { max-width: 240px !important; }
+}
